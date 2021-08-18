@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intro to git</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Mike Garcia" />
+    <script src="libs/header-attrs-2.9/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Intro to git
+### Mike Garcia
+
+---
+
+background-image: url(img/git.png)
+background-position: 50% 75%
+background-size: 5
+
+
+class: title-slide, inverse, center, top
+
+# Version control: what and why?
+
+---
+
+background-image: url(img/phd-comic.gif)
+background-position: right
+background-size: contain
+
+### TL;DR
+
+Use git
+
+--
+
+Avoid this workflow:
+
+1. Copy/paste files
+--
+
+2. Edit files
+
+--
+3. Save with new version number
+
+--
+4. Try to keep track of the mess!
+
+--
+5. Good luck with &gt;2 collaborators!
+---
+background-image: url(img/xkcd-git.png)
+background-position: right
+background-size: contain
+
+### What is git?
+
+---
+### What is git?
+
+- Distributed/decentralized version control
+- Coordinate work among multiple developers (and data scientists/analysts!)
+- Track file history (code and non-code)
+- Snapshots, aka commits
+- Can easily go back in time
+
+---
+
+### Short history of git &lt;sup&gt;1&lt;/sup&gt;
+
+- Developed in 2005 by Linus Torvald
+- Evolved from the Linux kernel
+
+### Principles: 
+
+- Speed
+- Simple design
+- Strong support for non-linear development (thousands of parallel branches)
+- Fully distributed
+- Able to handle large projects like the Linux kernel efficiently 
+
+
+.footnote[
+[1] Mostly stolen from [Official git documentation](https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git)
+]
+---
+### _Distributed_ version control 
+
+Users don't just checkout snapshots of a project
+
+- Every clone is a full backup of entire project
+  - including history of all changes. 
+- Not reliant on any server. 
+- Any user repository can be used to restore server in event of crash
+
+---
+
+## Git basics
+
+#### Repositories (_repos_)
+
+- Hidden folder `.git/` inside a project that tracks all changes to project files
+- Any local directory can be turned into a git repo
+- Remote repos can be _cloned_ into your computer
+
+--
+
+#### Snapshots (_commits_)
+
+Git thinks about data as snapshots in time. 
+
+If a file hasn't changed since a previous version, it's not redundantly stored. 
+
+
+---
+
+#### Integrity
+
+- Everything is checksummed before storing
+- Impossible to make changes or have file corruption without Git knowing about it
+
+#### Git only adds
+
+- Just about every action in Git adds data
+- Easy to revert to any prior state, hard to lose work or screw up a project
+
+---
+
+### Three states of Git
+
+At any time, any file resides in one of three states: 
+
+1. `Modified`: you have changed the file but have not committed it to history yet
+2. `Staged`: a modified file is marked in its current version to go into the next commit.
+3. `Committed`: the file is registered to the project history
+
+---
+
+### Basic workflow:
+
+1. **Modify** files in your project
+2. **Stage** the changes you want to be part of your next commit
+  - only those changes are added to the staging area.
+3. **Commit**: take the files in the staging area and stores that snapshot permanently to your history.
+
+---
+
+### Basic commands: local
+
+- `$ git init`: initialize repo
+- `$ git add &lt;file&gt;`: add files to staging area
+- `$ git rm --cached &lt;file&gt;`: remove files from staging
+- `$ git status`: get status of changes to files
+- `$ git commit`: commit (aka make checkpoint)
+
+--
+
+There are GUIs available, but I recommend learning the basics on the command line!
+
+---
+class: inverse
+background-image: url(img/branch.jpg)
+background-size: fill
+
+# Branches
+
+---
+
+### Branches 
+
+Sub-versions of a project that can split off from the main project and merge back together. 
+
+
+
+- Useful for prototyping without messing up the main branch &lt;sup&gt;1&lt;/sup&gt;
+- Extremely fast to switch between branches
+
+
+.footnote[
+ [1] Traditionally referred to as `master` branch, GitHub in process of renaming to `main`
+]
+
+---
+background-image: url(img/git-branch.png)
+background-size: contain
+
+---
+class: title-slide, inverse, center, middle
+background-image: url(img/octocat.png)
+background-position: 95%, 5%
+background-size: 15%
+
+# Remotes
+
+---
+
+## Git vs GitHub/BitBucket
+
+.pull-left[
+
+&lt;img src="img/git.png" width="20%" /&gt;
+#### Git
+- Version control software
+- Stand alone, can be used on its own
+]
+.pull-right[
+&lt;img src="img/octocat.png" width="20%" /&gt;
+#### GitHub/BitBucket
+- Git based service for hosting code
+- Eases collaboration and development
+- Provides additional features on top of plain git
+
+]
+
+---
+
+# Basic commands: remotes
+
+- `$ git clone`: make a copy of a remote repo
+- `$ git push`: send committed work to remote repo
+- `$ git pull`: pull other's work from remote repo
+
+.footnote[
+_Note:_ Need to set up authentication with remote 
+]
+
+---
+class: title-side, inverse, center, middle
+
+.pull-left[
+# Best practices
+]
+.pull-right[
+![](img/xkcd-git-commit.png)
+]
+
+.footnote[
+```
+git add &lt;these slides&gt;
+git commit -m 'WIP'
+```
+]
+
+---
+
+### A few best practices 
+
+- Track all projects involving code with git
+
+--
+
+- Use clear and concise commit messages
+
+--
+
+- Commit early, commit often
+
+--
+
+- Use a `.gitignore` file
+  - exclude files such as `.ipynb`, `.DS_STORE`, `RHistory` from being commited to project history
+  - Depending on project, may want to exclude data files
+  
+--
+
+- Do all prototyping on branch
+  - Submit pull requests to merge back into main
+  - Assign reviewer(s) to PRs
+  - Stress test code before approving
+
+--
+
+- Repo name should match local folder name
+  - important for reproducibility
+
+---
+
+### Repeated Amend
+
+Natural to be 'commit-shy': don't want to clutter a repository
+
+--
+
+- Make a few changes, then add and commit with a work in progress message (but don't push):
+
+```
+git commit -m "WIP"
+```
+--
+
+- Make more changes, commit again, but _amend_ the previous commit: 
+
+``` 
+git commit --amend --no-edit
+```
+
+--
+
+- Repeat above while working on that bit of code
+  - If you mess up, you can go back to the latest WIP commit
+
+--
+
+-  When finished, give a proper commit message and push:
+
+```
+git commit --amend -m "New awesome feature done!"
+git push
+```
+
+
+---
+class: title-slide, inverse, center, middle
+
+# Workflows
+
+---
+
+## Clone
+
+1. Clone a remote repository
+2. Make changes locally (on appropriate branch!)
+3. Commit and push to remote
+
+--
+
+#### Pros:
+
+- Simple
+
+#### Cons:
+
+- Gets messy with several collaborators
+
+---
+background-image: url(img/fork-and-clone.png)
+background-size: 50%
+background-position: 0%, 10%
+
+## Fork and Clone
+
+.pull-right[
+- _Fork_: your own remote copy (in GitHub, BitBucket)
+- Clone that fork to local, and work from there
+- Best not to commit to main branch
+]
+
+.footnote[
+Source: https://happygitwithr.com/fork-and-clone.html
+]
+---
+background-image: url(img/fork-triangle-happy.png)
+background-size: 50%
+background-position: 0%, 10%
+
+## Fork and Clone
+
+.pull-right[
+- Set upstream to the source repo
+- Pull from upstream
+- Push to your forked remote
+- Submit PR to pull changes on your fork into source repo
+]
+.footnote[
+Source: https://happygitwithr.com/fork-and-clone.html
+]
+
+---
+
+# References
+
+- [Visual introduction to Git (Medium article)](https://medium.com/@ashk3l/a-visual-introduction-to-git-9fdca5d3b43a)
+- [Git &amp; GitHub Crash Course for beginners (YouTube)](https://www.youtube.com/watch?v=SWYqp7iY_Tc)
+- [Oh Shit Git!?!](https://ohshitgit.com/)
+- [Happy Git with R]((https://happygitwithr.com/)
+- [Excuse me, do you have a moment to talk about version control? (Bryan, 2017)](https://peerj.com/preprints/3159/)
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
