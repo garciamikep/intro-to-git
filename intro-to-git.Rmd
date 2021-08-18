@@ -1,0 +1,387 @@
+---
+title: "Intro to git"
+author: "Mike Garcia"
+output:
+  xaringan::moon_reader:
+    includes:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+background-image: url(img/git.png)
+background-position: 50% 75%
+background-size: 5
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#4B5C69",
+  secondary_color = "#4B5C69",
+  inverse_header_color = "#2D2828"
+)
+```
+class: title-slide, inverse, center, top
+
+# Version control: what and why?
+
+---
+
+background-image: url(img/phd-comic.gif)
+background-position: right
+background-size: contain
+
+### TL;DR
+
+Use git
+
+--
+
+Avoid this workflow:
+
+1. Copy/paste files
+--
+
+2. Edit files
+
+--
+3. Save with new version number
+
+--
+4. Try to keep track of the mess!
+
+--
+5. Good luck with >2 collaborators!
+---
+background-image: url(img/xkcd-git.png)
+background-position: right
+background-size: contain
+
+### What is git?
+
+---
+### What is git?
+
+- Distributed/decentralized version control
+- Coordinate work among multiple developers (and data scientists/analysts!)
+- Track file history (code and non-code)
+- Snapshots, aka commits
+- Can easily go back in time
+
+---
+
+### Short history of git <sup>1</sup>
+
+- Developed in 2005 by Linus Torvald
+- Evolved from the Linux kernel
+
+### Principles: 
+
+- Speed
+- Simple design
+- Strong support for non-linear development (thousands of parallel branches)
+- Fully distributed
+- Able to handle large projects like the Linux kernel efficiently 
+
+
+.footnote[
+[1] Mostly stolen from [Official git documentation](https://git-scm.com/book/en/v2/Getting-Started-A-Short-History-of-Git)
+]
+---
+### _Distributed_ version control 
+
+Users don't just checkout snapshots of a project
+
+- Every clone is a full backup of entire project
+  - including history of all changes. 
+- Not reliant on any server. 
+- Any user repository can be used to restore server in event of crash
+
+---
+
+## Git basics
+
+#### Repositories (_repos_)
+
+- Hidden folder `.git/` inside a project that tracks all changes to project files
+- Any local directory can be turned into a git repo
+- Remote repos can be _cloned_ into your computer
+
+--
+
+#### Snapshots (_commits_)
+
+Git thinks about data as snapshots in time. 
+
+If a file hasn't changed since a previous version, it's not redundantly stored. 
+
+
+---
+
+#### Integrity
+
+- Everything is checksummed before storing
+- Impossible to make changes or have file corruption without Git knowing about it
+
+#### Git only adds
+
+- Just about every action in Git adds data
+- Easy to revert to any prior state, hard to lose work or screw up a project
+
+---
+
+### Three states of Git
+
+At any time, any file resides in one of three states: 
+
+1. `Modified`: you have changed the file but have not committed it to history yet
+2. `Staged`: a modified file is marked in its current version to go into the next commit.
+3. `Committed`: the file is registered to the project history
+
+---
+
+### Basic workflow:
+
+1. **Modify** files in your project
+2. **Stage** the changes you want to be part of your next commit
+  - only those changes are added to the staging area.
+3. **Commit**: take the files in the staging area and stores that snapshot permanently to your history.
+
+---
+
+### Basic commands: local
+
+- `$ git init`: initialize repo
+- `$ git add <file>`: add files to staging area
+- `$ git rm --cached <file>`: remove files from staging
+- `$ git status`: get status of changes to files
+- `$ git commit`: commit (aka make checkpoint)
+
+--
+
+There are GUIs available, but I recommend learning the basics on the command line!
+
+---
+class: inverse
+background-image: url(img/branch.jpg)
+background-size: fill
+
+# Branches
+
+---
+
+### Branches 
+
+Sub-versions of a project that can split off from the main project and merge back together. 
+
+
+
+- Useful for prototyping without messing up the main branch <sup>1</sup>
+- Extremely fast to switch between branches
+
+
+.footnote[
+ [1] Traditionally referred to as `master` branch, GitHub in process of renaming to `main`
+]
+
+---
+background-image: url(img/git-branch.png)
+background-size: contain
+
+---
+class: title-slide, inverse, center, middle
+background-image: url(img/octocat.png)
+background-position: 95%, 5%
+background-size: 15%
+
+# Remotes
+
+---
+
+## Git vs GitHub/BitBucket
+
+.pull-left[
+
+```{r, echo=F, out.width="20%"}
+knitr::include_graphics("img/git.png")
+```
+#### Git
+- Version control software
+- Stand alone, can be used on its own
+]
+.pull-right[
+```{r, echo=F, out.width="20%"}
+knitr::include_graphics("img/octocat.png")
+```
+#### GitHub/BitBucket
+- Git based service for hosting code
+- Eases collaboration and development
+- Provides additional features on top of plain git
+
+]
+
+---
+
+# Basic commands: remotes
+
+- `$ git clone`: make a copy of a remote repo
+- `$ git push`: send committed work to remote repo
+- `$ git pull`: pull other's work from remote repo
+
+.footnote[
+_Note:_ Need to set up authentication with remote 
+]
+
+---
+class: title-side, inverse, center, middle
+
+.pull-left[
+# Best practices
+]
+.pull-right[
+![](img/xkcd-git-commit.png)
+]
+
+.footnote[
+```
+git add <these slides>
+git commit -m 'WIP'
+```
+]
+
+---
+
+### A few best practices 
+
+- Track all projects involving code with git
+
+--
+
+- Use clear and concise commit messages
+
+--
+
+- Commit early, commit often
+
+--
+
+- Use a `.gitignore` file
+  - exclude files such as `.ipynb`, `.DS_STORE`, `RHistory` from being commited to project history
+  - Depending on project, may want to exclude data files
+  
+--
+
+- Do all prototyping on branch
+  - Submit pull requests to merge back into main
+  - Assign reviewer(s) to PRs
+  - Stress test code before approving
+
+--
+
+- Repo name should match local folder name
+  - important for reproducibility
+
+---
+
+### Repeated Amend
+
+Natural to be 'commit-shy': don't want to clutter a repository
+
+--
+
+- Make a few changes, then add and commit with a work in progress message (but don't push):
+
+```
+git commit -m "WIP"
+```
+--
+
+- Make more changes, commit again, but _amend_ the previous commit: 
+
+``` 
+git commit --amend --no-edit
+```
+
+--
+
+- Repeat above while working on that bit of code
+  - If you mess up, you can go back to the latest WIP commit
+
+--
+
+-  When finished, give a proper commit message and push:
+
+```
+git commit --amend -m "New awesome feature done!"
+git push
+```
+
+
+---
+class: title-slide, inverse, center, middle
+
+# Workflows
+
+---
+
+## Clone
+
+1. Clone a remote repository
+2. Make changes locally (on appropriate branch!)
+3. Commit and push to remote
+
+--
+
+#### Pros:
+
+- Simple
+
+#### Cons:
+
+- Gets messy with several collaborators
+
+---
+background-image: url(img/fork-and-clone.png)
+background-size: 50%
+background-position: 0%, 10%
+
+## Fork and Clone
+
+.pull-right[
+- _Fork_: your own remote copy (in GitHub, BitBucket)
+- Clone that fork to local, and work from there
+- Best not to commit to main branch
+]
+
+.footnote[
+Source: https://happygitwithr.com/fork-and-clone.html
+]
+---
+background-image: url(img/fork-triangle-happy.png)
+background-size: 50%
+background-position: 0%, 10%
+
+## Fork and Clone
+
+.pull-right[
+- Set upstream to the source repo
+- Pull from upstream
+- Push to your forked remote
+- Submit PR to pull changes on your fork into source repo
+]
+.footnote[
+Source: https://happygitwithr.com/fork-and-clone.html
+]
+
+---
+
+# References
+
+- [Visual introduction to Git (Medium article)](https://medium.com/@ashk3l/a-visual-introduction-to-git-9fdca5d3b43a)
+- [Git & GitHub Crash Course for beginners (YouTube)](https://www.youtube.com/watch?v=SWYqp7iY_Tc)
+- [Oh Shit Git!?!](https://ohshitgit.com/)
+- [Happy Git with R]((https://happygitwithr.com/)
+- [Excuse me, do you have a moment to talk about version control? (Bryan, 2017)](https://peerj.com/preprints/3159/)
+
